@@ -1,0 +1,70 @@
+/*-- Mustafa Taner 315CB -- Tema 3 SD -- */
+
+
+	Tema contine 3 fisiere:
+
+  1. "tarb.h" - contine defintiile la structura nodurilor si la functii;
+
+  2. "main.c" - contine deschiderea fisierelor si apelarea functiilor de
+  citire si rezolvare a operanzilor / ecuatiilor;
+
+  3. "functii.c" - contine functiile auxiliare rezolvarii ecuatiilor.
+
+
+	Modul de operare al functiilor principale:
+
+  1. "main" - deschidere fisiere de citire / scriere;
+	- alocare matrice & vector pentru retinere nume si valori variabile;
+	- apelare functiile "citireVariabile" & "rezolvareEcuatii";
+	- eliberare matrice & vector cu variabile;
+	- inchidere fisiere.
+
+  2. "citireVariabile" - se citeste fiecare variabila;
+	- se adauga in matrice numele ei si in vector valoarea ei.
+
+  3. "rezolvareEcuatii" - se citeste pe rand fiecare ecuatie cu <fgets>;
+	- se parcurge cu "strtok" fiecare termen / operator al ecuatiei;
+	- se verifica daca este termen sau operator, se verifica daca termenul
+	este negativ;
+	- daca este termen de forma "a, b, c" (variabila), se apeleaza functia
+	"gasesteVal" pentru a parcurge matricea si vectorul cu variabile si a ii
+	determina valoarea numerica;
+	- daca este termen sub forma de valoare numerica, se apeleaza functia
+	"calculeazaVal" pentru a ii determina valoare sub forma "int" (pentru
+	ca momentan este reprezentat sub forma de sir de caractere);
+	- se creeaza un nod cu info ori de tip 1 (operator), ori de tip 2
+	(operand) cu functia "ConstrFr";
+
+		!!! Daca operatorul este "sqrt", acesta va primi termenul pe
+	care trebuie sa-l calculeze in stanga, iar in dreapta se va adauga un
+	nod care nu va fi folosit, doar pentru a umple spatiul si a nu se
+	adauga altceva in loc ("sqrt" primeste doar un argument);
+		!!! Daca o variabila nu a fost gasita in matrice (nedefinita)
+	aceasta va lua valoarea 1 si va avea tipul 3.
+
+	- este adaugat nodul in arbore cu prioritate de adaugare pe partea
+	stanga, un fel de parcurgere SRD, cu functia "AdaugNod";
+	
+	- se apeleaza functia "calcSDR", care returneaza -1 daca exista
+	un termen nedefinit, 0 daca exista o operatie invalida si 1 daca
+	s-a calculat ecuatia cu succes. In functie de caz, se printeaza
+	in fisierul de output mesajul corespunzator.
+
+	- se apeleaza functia "distrugere" care elibereaza memoria arborelui.
+
+	Alte functii:
+
+  1. "eroare" - apelata cand exista o eroare de alocare dinamica de memorie;
+	- elibereaza matricea si vectorul de variabile si arborele.
+
+  2. "calcSDR" - calculeaza in ordinea SDR arborele ecuatiei;
+	- afla ce operator contine nodul parcurs si aplica operatia celor 2 fii;
+	- daca operatorul este "sqrt", se aplica doar nodului stang;
+	- se sterg cei 2 fii din arbore / memorie;
+	- rezultatul este alocat dinamic, se inlocuieste info-ul nodului cu
+	acesta si se updateaza tipul (era de tip 1 - operator - si devine tip 2);
+	
+		!!! Daca se da de o impartire la 0 sau "sqrt" din numar negativ, se
+	returneaza 0. Daca se da de un termen nedefinit, se returneaza -1.
+	Daca se parcurge cu succes tot arborele, se returneaza 1 si radacina va
+	avea valoarea finala a ecuatiei.
